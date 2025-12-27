@@ -28,10 +28,14 @@ export const login = async (req, res) => {
   if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
   const token = jwt.sign(
-    { id: user._id, role: user.role },
+    { id: user._1d, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
 
-  res.json({ token });
+  // This is the line that generates the response you want:
+  const { password: _password, ...userWithoutPassword } = user.toObject();
+
+  res.json({ token, user: userWithoutPassword });
+
 };
